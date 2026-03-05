@@ -79,6 +79,12 @@ body {
     3px 3px 12px rgba(0, 0, 0, 0.5);
 }
 
+/* Equal width windows for mobile */
+.wl-window {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
 .titlebar {
   background: #ff7fdf;
   color: #ffffff;

@@ -511,7 +511,7 @@ export default function Home() {
         {/* Bottom — Whitelist Form (left) + Checker (right) */}
         <div className="flex flex-col md:flex-row gap-4 items-stretch">
           {/* LEFT — Whitelist Form Window */}
-          <div className="window flex-1 min-w-0 flex flex-col self-start">
+          <div className="window wl-window basis-full md:basis-1/2 flex flex-col self-start">
             <TitleBar title="phase 3 - whitelist form [live]" />
             <div className="body flex-1 flex">
               <div className="inset p-4 flex-1 flex flex-col">
@@ -577,7 +577,7 @@ export default function Home() {
           </div>
 
           {/* RIGHT — Whitelist Checker Window */}
-          <div className="window flex-1 min-w-0 flex flex-col self-start">
+          <div className="window wl-window basis-full md:basis-1/2 flex flex-col self-start">
             <TitleBar title="whitelist checker" />
             <div className="body flex-1 flex">
               <div className="inset p-4 flex-1 flex flex-col">
