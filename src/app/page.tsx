@@ -348,7 +348,7 @@ export default function Home() {
                       schizostimmys⋆⭒˚.⋆
                     </h1>
                     <p className="subtitle font-pixel">
-                      network is powered by love.✧˚
+                      "the network is powered by love."✧˚
                     </p>
                   </div>
                   
@@ -390,7 +390,7 @@ export default function Home() {
                       </span>
                       <br />
                       <span className="detail-value">
-                        eth
+                        $eth
                       </span>
                     </div>
                     <div>
