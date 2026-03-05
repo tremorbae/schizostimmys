@@ -195,6 +195,27 @@ body {
   padding-left: 0.7rem;
 }
 
+/* Video window styling */
+.video-window {
+  flex: 1.5;
+}
+
+/* Video fallback styling */
+.video-fallback {
+  text-align: center;
+  color: #808080;
+  font-size: 10px;
+}
+
+.video-fallback .text-3xl {
+  font-size: 24px;
+  margin-bottom: 0.5rem;
+}
+
+.video-fallback .text-8px {
+  font-size: 8px;
+}
+
 /* Project details grid styling */
 .project-details {
   display: grid;
@@ -250,22 +271,6 @@ body {
 /* Phases container styling */
 .phases-container {
   padding-left: .7rem;
-}
-
-/* Video fallback styling */
-.video-fallback {
-  text-align: center;
-  color: #808080;
-  font-size: 10px;
-}
-
-.video-fallback .text-3xl {
-  font-size: 24px;
-  margin-bottom: 0.5rem;
-}
-
-.video-fallback .text-8px {
-  font-size: 8px;
 }
 
 /* Success username styling */

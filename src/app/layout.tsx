@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: 'Schizostimmys',
     images: [
       {
-        url: '/ss logo.png',
+        url: '/schizostimmys-logo.png',
         width: 1200,
         height: 630,
         alt: 'Schizostimmys',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Schizostimmys',
     description: 'Join the Schizostimmys network - a generative NFT collection launching June 2026 on Ethereum. Sign up for phase 3 whitelist now.',
-    images: ['/ss logo.png'],
+    images: ['/schizostimmys-logo.png'],
     creator: '@schizostimmys',
   },
   icons: {

@@ -12,7 +12,7 @@ export default function JsonLd() {
       "name": "Schizostimmys",
       "description": "Join the Schizostimmys network - a generative NFT collection launching June 2026 on Ethereum. Sign up for phase 3 whitelist now. Limited spots available.",
       "url": "https://schizostimmys.xyz",
-      "image": "https://schizostimmys.xyz/ss logo.png",
+      "image": "https://schizostimmys.xyz/schizostimmys-logo.png",
       "creator": {
         "@type": "Organization",
         "name": "Schizostimmys",

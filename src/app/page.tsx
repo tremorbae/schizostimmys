@@ -319,7 +319,7 @@ export default function Home() {
             <div className="inset">
               <div className="banner-container">
                 <img 
-                  src="/ss logo.png" 
+                  src="/schizostimmys-logo.png" 
                   alt="Schizostimmys logo - announcement banner"
                   className="banner-img"
                 />
@@ -348,7 +348,7 @@ export default function Home() {
                       schizostimmys⋆⭒˚.⋆
                     </h1>
                     <p className="subtitle font-pixel">
-                      the network is powered by love.✧˚
+                      network is powered by love.✧˚
                     </p>
                   </div>
                   
@@ -465,7 +465,6 @@ export default function Home() {
 
                 </div>
               </div>
-
             </div>
           </div>
 
@@ -493,12 +492,12 @@ export default function Home() {
                       video.play().catch(() => {});
                     }}
                   >
-                    <source src="/video-preview.mp4" type="video/mp4" />
+                    <source src="/schizostimmys-preview-low.mp4" type="video/mp4" />
                     {/* Fallback placeholder */}
                     <div className="absolute inset-0 flex items-center justify-center bg-[#ff7fdf]">
                       <div className="video-fallback">
                         <div className="text-3xl mb-2">▶</div>
-                        <p>video-preview.mp4</p>
+                        <p>schizostimmys-preview.mp4</p>
                         <p className="text-xs">(loading...)</p>
                       </div>
                     </div>
@@ -507,7 +506,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
         </div>
 
         {/* Bottom — Whitelist Form (left) + Checker (right) */}
@@ -533,6 +531,7 @@ export default function Home() {
                   <div className="flex flex-col gap-3">
                     <Input
                       label="twitter username"
+                      id="twitter-username"
                       value={twitter}
                       onChange={handleTwitterChange}
                       onFocus={() => setError("")}
@@ -541,6 +540,7 @@ export default function Home() {
                     
                     <Input
                       label="wallet address"
+                      id="wallet-address"
                       value={wallet}
                       onChange={handleWalletChange}
                       onFocus={() => setError("")}
@@ -550,6 +550,7 @@ export default function Home() {
                     <div className="flex flex-col gap-3">
                       <Input
                         label="phase 2 code (optional)"
+                        id="phase-2-code"
                         value={code}
                         onChange={handleCodeChange}
                         onFocus={() => setError("")}
@@ -595,6 +596,7 @@ export default function Home() {
                   <div className="flex flex-col gap-3">
                     <Input
                       label="wallet address"
+                      id="checker-wallet-address"
                       value={checkerWallet}
                       onChange={handleCheckerWalletChange}
                       onFocus={() => setCheckerError("")}
