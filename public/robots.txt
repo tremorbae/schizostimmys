@@ -1,0 +1,11 @@
+# Robots.txt - Tells search engines what to crawl
+# https://schizostimmys.xyz
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://schizostimmys.xyz/sitemap.xml
+
+# Block unnecessary pages
+Disallow: /api/
