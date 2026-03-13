@@ -13,10 +13,6 @@ html {
 body {
   font-family: var(--font-pixel), "Press Start 2P", monospace;
   background-color: #ff7fdf;
-  background-image: url('/websitebackground.png');
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
   margin: 0;
   overflow-x: hidden;
 }
