@@ -42,7 +42,6 @@ export async function GET() {
       tracks,
     });
   } catch (error) {
-    console.error('Error reading music directory:', error);
     return NextResponse.json({ name: "it's psychotherapy", tracks: [] });
   }
 }

@@ -139,7 +139,6 @@ export async function POST(request: NextRequest) {
         }
       });
     } catch (transactionError: any) {
-      console.error('Firestore transaction error:', transactionError);
 
       if (transactionError instanceof Error) {
         if (transactionError.message.startsWith('twitter_exists')) {
@@ -193,7 +192,6 @@ export async function POST(request: NextRequest) {
     );
 
   } catch (error) {
-    console.error('Whitelist API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

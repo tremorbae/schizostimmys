@@ -52,7 +52,6 @@ export async function POST(request: NextRequest) {
       );
 
     } catch (error) {
-      console.error('Error checking whitelist:', error);
       return NextResponse.json(
         { error: 'Unable to check whitelist status' },
         { status: 500 }
@@ -60,7 +59,6 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Check whitelist API error:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

@@ -14,13 +14,11 @@ if (!admin.apps.length) {
     try {
       privateKey = Buffer.from(base64PrivateKey, 'base64').toString('utf8');
     } catch (error) {
-      console.error('Failed to decode FIREBASE_PRIVATE_KEY_BASE64');
       throw new Error('Invalid FIREBASE_PRIVATE_KEY_BASE64 value');
     }
   }
 
   if (!projectId || !clientEmail || !privateKey) {
-    console.warn('Missing Firebase service account environment variables - Firebase will not be available');
   } else {
     admin.initializeApp({
       credential: admin.credential.cert({

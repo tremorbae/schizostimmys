@@ -68,7 +68,6 @@ const MusicPlayer = memo(() => {
     if (!waitingForInteraction) return;
 
     const startAutoplay = (eventType?: string) => {
-      console.log('Autoplay triggered by:', eventType || 'unknown');
       setWaitingForInteraction(false);
       const t = tracksRef.current;
       if (!audioRef.current || t.length === 0) return;
