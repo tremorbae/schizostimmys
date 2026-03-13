@@ -4,6 +4,13 @@ import { normalizeWallet } from '@/lib/utils';
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Firebase is available
+    if (!firestore) {
+      return NextResponse.json(
+        { error: 'Service temporarily unavailable - please try again later' },
+        { status: 503 }
+      );
+    }
     const body = await request.json();
     const { wallet } = body;
 

@@ -4,11 +4,18 @@ import { firestore, FieldValue } from '@/lib/firebaseAdmin';
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Firebase is available
+    if (!firestore) {
+      return NextResponse.json(
+        { error: 'Service temporarily unavailable - please try again later' },
+        { status: 503 }
+      );
+    }
     const body = await request.json();
-    const { twitter, wallet, code, turnstileToken } = body;
+    const { twitter, wallet, code, recaptchaToken } = body;
 
-    // Verify Turnstile token
-    if (!turnstileToken) {
+    // Verify reCAPTCHA token
+    if (!recaptchaToken) {
       return NextResponse.json(
         { error: 'Captcha verification is required' },
         { status: 400 }
@@ -16,20 +23,29 @@ export async function POST(request: NextRequest) {
     }
 
     try {
-      const turnstileResponse = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+
+      if (!secretKey) {
+        return NextResponse.json(
+          { error: 'Captcha verification is temporarily unavailable' },
+          { status: 503 }
+        );
+      }
+
+      const recaptchaResponse = await fetch('https://www.google.com/recaptcha/api/siteverify', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: new URLSearchParams({
-          secret: process.env.TURNSTILE_SECRET_KEY || '',
-          response: turnstileToken,
+          secret: secretKey,
+          response: recaptchaToken,
         }),
       });
 
-      const turnstileData = await turnstileResponse.json();
+      const recaptchaData = await recaptchaResponse.json();
 
-      if (!turnstileData.success) {
+      if (!recaptchaData.success) {
         return NextResponse.json(
           { error: 'Captcha verification failed. Please try again.' },
           { status: 400 }
@@ -191,9 +207,9 @@ export async function POST(request: NextRequest) {
       { status: 200 }
     );
 
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: error?.message || 'Internal server error' },
       { status: 500 }
     );
   }

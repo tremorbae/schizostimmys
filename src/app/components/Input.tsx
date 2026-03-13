@@ -18,6 +18,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           id={inputId}
           name={inputId}
           className={`input w-full pl-6 ${className}`}
+          autoComplete="off"
           {...props}
         />
       </div>

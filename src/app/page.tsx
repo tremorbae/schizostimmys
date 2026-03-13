@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, memo, useCallback, useMemo, useEffect } from "react";
-import { Turnstile } from "@marsidev/react-turnstile";
+import { useState, memo, useCallback, useMemo, useEffect, useRef } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import JsonLd from "./components/JsonLd";
 import Input from "./components/Input";
 import MusicPlayer from "./components/MusicPlayer";
@@ -46,7 +46,10 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
   const [showLinkModal, setShowLinkModal] = useState(false);
-  const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const [recaptchaToken, setRecaptchaToken] = useState<string>("");
+  const recaptchaRef = useRef<ReCAPTCHA | null>(null);
+  const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "";
+  const isRecaptchaConfigured = Boolean(recaptchaSiteKey);
 
   const blurActiveElement = useCallback(() => {
     if (typeof document !== "undefined") {
@@ -75,8 +78,24 @@ export default function Home() {
       return;
     }
 
-    if (!turnstileToken) {
+    if (!isRecaptchaConfigured) {
+      setError("captcha verification is temporarily unavailable");
+      return;
+    }
+
+    if (!recaptchaToken) {
       setError("please complete the captcha verification");
+      return;
+    }
+
+    // Ensure Twitter and wallet are still valid when submitting
+    if (!twitter.trim() || !wallet.trim()) {
+      setError("please enter your twitter handle and wallet address");
+      return;
+    }
+
+    if (!/^0x[a-fA-F0-9]{40}$/.test(wallet.trim())) {
+      setError("please enter a valid ethereum address");
       return;
     }
     setIsSubmitting(true);
@@ -91,7 +110,7 @@ export default function Home() {
           twitter: twitter.trim(),
           wallet: wallet.trim(),
           code: code.trim() || undefined,
-          turnstileToken,
+          recaptchaToken,
         }),
       });
 
@@ -108,8 +127,10 @@ export default function Home() {
       setError('network error - please try again');
     } finally {
       setIsSubmitting(false);
+      recaptchaRef.current?.reset();
+      setRecaptchaToken("");
     }
-  }, [twitter, wallet, code, turnstileToken, blurActiveElement]);
+  }, [twitter, wallet, code, recaptchaToken, blurActiveElement, isRecaptchaConfigured]);
 
   const handleCheckWhitelist = useCallback(async () => {
     if (!checkerWallet) {
@@ -176,6 +197,15 @@ export default function Home() {
     setCheckerWallet(e.target.value);
   }, []);
 
+  const handleRecaptchaChange = useCallback((token: string | null) => {
+    setRecaptchaToken(token || "");
+    if (token) {
+      setError("");
+    }
+  }, []);
+
+  const isSubmitDisabled = isSubmitting || !recaptchaToken || !isRecaptchaConfigured;
+
   // Memoized modal close handlers
   const handleCloseModal = useCallback(() => {
     blurActiveElement();
@@ -183,6 +213,8 @@ export default function Home() {
     setTwitter("");
     setWallet("");
     setCode("");
+    recaptchaRef.current?.reset();
+    setRecaptchaToken("");
   }, [blurActiveElement]);
 
   const handleCloseCheckerModal = useCallback(() => {
@@ -508,19 +540,11 @@ export default function Home() {
                         onFocus={() => setError("")}
                         placeholder="enter code"
                       />
-                      <Turnstile
-                        siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
-                        onSuccess={(token) => {
-                          setTurnstileToken(token);
-                          setError("");
-                        }}
-                        onExpire={() => setTurnstileToken("")}
-                        onError={() => setTurnstileToken("")}
-                        options={{
-                          theme: "light",
-                          size: "normal",
-                          refreshExpired: "auto",
-                        }}
+                      <ReCAPTCHA
+                        ref={recaptchaRef}
+                        sitekey={recaptchaSiteKey}
+                        theme="light"
+                        onChange={handleRecaptchaChange}
                       />
                       <div>
                         <button type="submit" className="button w-full" disabled={isSubmitting}>
@@ -741,7 +765,7 @@ export default function Home() {
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div
             className="window"
-            style={{ minWidth: '280px', maxWidth: '90vw', position: 'relative' }}
+            style={{ minWidth: '280px', maxWidth: '400px', position: 'relative' }}
             onClick={(e) => e.stopPropagation()}
           >
             <TitleBar
@@ -760,7 +784,7 @@ export default function Home() {
         <div className="modal-overlay" onClick={handleCloseCheckerModal}>
           <div
             className="window"
-            style={{ minWidth: '280px', maxWidth: '90vw', position: 'relative' }}
+            style={{ minWidth: '280px', maxWidth: '400px', position: 'relative' }}
             onClick={(e) => e.stopPropagation()}
           >
             <TitleBar title="whitelist checker" onClose={handleCloseCheckerModal} />
@@ -776,7 +800,7 @@ export default function Home() {
         <div className="modal-overlay" onClick={handleCloseLinkModal}>
           <div
             className="window"
-            style={{ minWidth: '280px', maxWidth: '90vw', position: 'relative' }}
+            style={{ minWidth: '280px', maxWidth: '400px', position: 'relative' }}
             onClick={(e) => e.stopPropagation()}
           >
             <TitleBar title="something happened.." onClose={handleCloseLinkModal} />

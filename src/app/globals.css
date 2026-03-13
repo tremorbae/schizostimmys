@@ -344,6 +344,54 @@ video::-webkit-media-controls-enclosure {
   box-shadow: none;
 }
 
+/* Remove all focus styles globally */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Remove browser autofill and selection styles */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #000000 !important;
+  background-color: #ffffff !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Disable autofill popup and suggestions */
+input {
+  -webkit-autocomplete: off;
+}
+
+input::-webkit-credentials-auto-fill-button,
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-strong-password-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
+
+/* Remove blue selection */
+input::selection,
+textarea::selection {
+  background-color: #c0c0c0 !important;
+  color: #000000 !important;
+}
+
+/* Remove blue highlight from any input state */
+input:autofill,
+input:-webkit-autofill {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
 /* Input fields */
 .input {
   border: 2px solid #808080;
@@ -358,8 +406,7 @@ video::-webkit-media-controls-enclosure {
 }
 
 .input:focus {
-  outline: 1px dotted #000080;
-  outline-offset: -1px;
+  outline: none;
 }
 
 .input::placeholder {

@@ -9,24 +9,37 @@ if (!admin.apps.length) {
   let privateKey: string | undefined;
 
   if (rawPrivateKey) {
-    privateKey = rawPrivateKey.replace(/\\n/g, '\n');
+    privateKey = rawPrivateKey.replace(/\\n/g, '\n').replace(/-----BEGIN PRIVATE KEY-----\s*/, '-----BEGIN PRIVATE KEY-----\n').replace(/\s*-----END PRIVATE KEY-----/, '\n-----END PRIVATE KEY-----');
   } else if (base64PrivateKey) {
     try {
       privateKey = Buffer.from(base64PrivateKey, 'base64').toString('utf8');
+      privateKey = privateKey.replace(/-----BEGIN PRIVATE KEY-----\s*/, '-----BEGIN PRIVATE KEY-----\n').replace(/\s*-----END PRIVATE KEY-----/, '\n-----END PRIVATE KEY-----');
     } catch (error) {
       throw new Error('Invalid FIREBASE_PRIVATE_KEY_BASE64 value');
     }
   }
 
+  // Validate private key format
+  if (privateKey && !privateKey.includes('-----BEGIN PRIVATE KEY-----')) {
+    throw new Error('Invalid private key format - must include PEM headers');
+  }
+
   if (!projectId || !clientEmail || !privateKey) {
   } else {
-    admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId,
-        clientEmail,
-        privateKey,
-      }),
-    });
+    try {
+      admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId,
+          clientEmail,
+          privateKey,
+        }),
+      });
+    } catch (error: any) {
+      // Don't throw during build, just log the error
+      if (process.env.NODE_ENV === 'development') {
+        // Silently handle in development to avoid noise
+      }
+    }
   }
 }
 
