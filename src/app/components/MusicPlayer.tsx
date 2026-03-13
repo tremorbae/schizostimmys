@@ -252,15 +252,6 @@ const MusicPlayer = memo(() => {
     // Disable autoplay if user manually selects a song
     if (waitingForInteraction) {
       setWaitingForInteraction(false);
-      // Remove autoplay listeners
-      if (autoplayClickRef.current) {
-        document.removeEventListener("click", autoplayClickRef.current);
-        autoplayClickRef.current = null;
-      }
-      if (autoplayKeydownRef.current) {
-        document.removeEventListener("keydown", autoplayKeydownRef.current);
-        autoplayKeydownRef.current = null;
-      }
     }
     
     const track = tracks[index];
@@ -344,15 +335,6 @@ const MusicPlayer = memo(() => {
     // Disable autoplay if user clicks stop first
     if (waitingForInteraction) {
       setWaitingForInteraction(false);
-      // Remove autoplay listeners
-      if (autoplayClickRef.current) {
-        document.removeEventListener("click", autoplayClickRef.current);
-        autoplayClickRef.current = null;
-      }
-      if (autoplayKeydownRef.current) {
-        document.removeEventListener("keydown", autoplayKeydownRef.current);
-        autoplayKeydownRef.current = null;
-      }
     }
     
     const audio = audioRef.current;

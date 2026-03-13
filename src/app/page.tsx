@@ -744,7 +744,7 @@ export default function Home() {
             style={{ minWidth: '280px', maxWidth: '90vw', position: 'relative' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <TitleBarWithButtons
+            <TitleBar
               title={code ? "phase 2 - whitelist form [live]" : "phase 3 - whitelist form [live]"}
               onClose={handleCloseModal}
             />
