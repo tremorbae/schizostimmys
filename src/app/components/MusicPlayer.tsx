@@ -406,7 +406,7 @@ const MusicPlayer = memo(() => {
           <canvas ref={eqCanvasRef} className="player-eq-canvas" />
         </div>
         <div className="player-made-with-love">
-          made with love!
+          𝔰𝔠𝔥𝔦𝔷𝔬𝔭𝔩𝔞𝔶𝔢𝔯
         </div>
       </div>
 

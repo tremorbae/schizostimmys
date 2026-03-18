@@ -19,6 +19,7 @@ body {
   background-repeat: no-repeat;
   margin: 0;
   overflow-x: hidden;
+  overflow-y: scroll;
 }
 
 /* Reduce paint on scroll */
@@ -1018,21 +1019,31 @@ input:-webkit-autofill {
   }
 
   .player-controls {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
     align-items: center;
+    gap: 8px;
     padding: 6px;
     width: 100%;
   }
 
   .player-control-group {
-    width: auto;
+    display: flex;
+    align-items: center;
     gap: 6px;
+    min-width: 0;
   }
 
-  .player-control-group:first-child,
+  .player-control-group:first-child {
+    justify-content: flex-start;
+  }
+
+  .player-control-group.center {
+    justify-content: center;
+  }
+
   .player-control-group.right {
-    display: none;
+    justify-content: flex-end;
   }
 
   .player-buttons {
@@ -1042,27 +1053,22 @@ input:-webkit-autofill {
     gap: 0;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: auto;
   }
 
   .player-btn-row {
     display: contents;
   }
 
-  .player-btn-shuffle { order: 1; }
+  .player-btn-shuffle { order: 1; display: none !important; }
   .player-btn-prev { order: 2; }
   .player-btn-play { order: 3; }
   .player-btn-stop { order: 4; }
   .player-btn-next { order: 5; }
-  .player-btn-repeat { order: 6; }
+  .player-btn-repeat { order: 6; display: none !important; }
 
   .player-btn-inline {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    min-width: 48px;
-    height: 22px;
-    font-size: 10px;
+    display: none !important;
   }
 
   .player-btn-text {

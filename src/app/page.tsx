@@ -249,16 +249,21 @@ export default function Home() {
       }
     };
 
+    const preventScroll = (event: Event) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener("keydown", handleKey);
+
     if (anyModalOpen) {
-      document.body.style.overflow = "hidden";
-      window.addEventListener("keydown", handleKey);
-    } else {
-      document.body.style.overflow = "";
+      window.addEventListener("wheel", preventScroll, { passive: false });
+      window.addEventListener("touchmove", preventScroll, { passive: false });
     }
 
     return () => {
-      document.body.style.overflow = "";
       window.removeEventListener("keydown", handleKey);
+      window.removeEventListener("wheel", preventScroll);
+      window.removeEventListener("touchmove", preventScroll);
     };
   }, [showModal, showCheckerModal, showLinkModal, handleCloseModal, handleCloseCheckerModal, handleCloseLinkModal]);
 
@@ -568,7 +573,7 @@ export default function Home() {
 
           {/* Music Player - order-3 mobile (after checker), order-2 desktop (right of form) */}
           <div className="window music-player-window basis-full md:basis-1/2 flex flex-col order-1 md:order-2 self-start">
-            <TitleBar title="music player - [its_psychotherapy] playlist" />
+            <TitleBar title="schizoplayer - [its_psycotherapy] playlist" />
             <div className="body flex-1 flex">
               <div className="inset p-0 flex-1 flex flex-col">
                 <MusicPlayer />
@@ -753,7 +758,7 @@ export default function Home() {
               className="w-12 h-12"
             />
           <p className="text-sm" style={{ color: '#ff7fdf' }}>
-            &copy; 2026 schizostimmys. made with love!
+            &copy; 2026 schizostimmys. made with love.
           </p>
         </div>
 
@@ -765,7 +770,7 @@ export default function Home() {
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div
             className="window"
-            style={{ minWidth: '280px', maxWidth: '400px', position: 'relative' }}
+            style={{ minWidth: '280px', maxWidth: '400px', width: '90vw', margin: '0 auto', position: 'relative' }}
             onClick={(e) => e.stopPropagation()}
           >
             <TitleBar
@@ -784,7 +789,7 @@ export default function Home() {
         <div className="modal-overlay" onClick={handleCloseCheckerModal}>
           <div
             className="window"
-            style={{ minWidth: '280px', maxWidth: '400px', position: 'relative' }}
+            style={{ minWidth: '280px', maxWidth: '400px', width: '90vw', margin: '0 auto', position: 'relative' }}
             onClick={(e) => e.stopPropagation()}
           >
             <TitleBar title="whitelist checker" onClose={handleCloseCheckerModal} />
@@ -800,7 +805,7 @@ export default function Home() {
         <div className="modal-overlay" onClick={handleCloseLinkModal}>
           <div
             className="window"
-            style={{ minWidth: '280px', maxWidth: '400px', position: 'relative' }}
+            style={{ minWidth: '280px', maxWidth: '400px', width: '90vw', margin: '0 auto', position: 'relative' }}
             onClick={(e) => e.stopPropagation()}
           >
             <TitleBar title="something happened.." onClose={handleCloseLinkModal} />
