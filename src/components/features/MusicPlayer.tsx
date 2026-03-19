@@ -15,6 +15,21 @@ function formatTime(seconds: number): string {
   return `${mins}:${secs.toString().padStart(2, "0")}`;
 }
 
+const TRACK_ORDER = [
+  "Future Candy",
+  "My Life",
+  "Baby Pink",
+  "PRISM GATE",
+  "Stardust Midnight",
+  "Page Of You",
+  "That Acid",
+  "Welcome to CEO Cat Center",
+  "Sugar, We're Going Down",
+  "Bumble Bee",
+  "I LIKE THE NOISE",
+  "4 BY 4 BEATS (I Don't Care)",
+];
+
 const MusicPlayer = memo(() => {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(-1);
@@ -45,8 +60,20 @@ const MusicPlayer = memo(() => {
       .then((res) => res.json())
       .then((data) => {
         let t = data.tracks || [];
-        // Sort tracks alphabetically
-        t = [...t].sort((a, b) => a.title.localeCompare(b.title));
+        const orderMap = TRACK_ORDER.reduce<Record<string, number>>((acc, title, index) => {
+          acc[title.toLowerCase()] = index;
+          return acc;
+        }, {});
+        // Sort tracks prioritizing custom order, then alphabetically
+        t = [...t].sort((a, b) => {
+          const aKey = orderMap[a.title.toLowerCase()];
+          const bKey = orderMap[b.title.toLowerCase()];
+
+          if (aKey !== undefined && bKey !== undefined) return aKey - bKey;
+          if (aKey !== undefined) return -1;
+          if (bKey !== undefined) return 1;
+          return a.title.localeCompare(b.title);
+        });
         setTracks(t);
         tracksRef.current = t;
       })
