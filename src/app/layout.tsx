@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import JsonLd from "../components/seo/JsonLd";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Schizostimmys⋆⭒˚.⋆",
+  title: "Schizostimmys★彡",
   description: "Join the Schizostimmys network - a schizo-kawaii collection launching June 2026 on Ethereum. Sign up for phase 3 whitelist now! Limited spots available.",
   keywords: ["NFT", "Ethereum", "generative art", "crypto art", "blockchain", "digital collectibles", "Schizostimmys"],
   authors: [{ name: "Schizostimmys" }],

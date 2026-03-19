@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { validateWallet, validateTwitter, validatePhase2Code, normalizeTwitter, normalizeWallet } from '@/lib/utils';
-import { firestore, FieldValue } from '@/lib/firebaseAdmin';
+import { validateWallet, validateTwitter, validatePhase2Code, normalizeTwitter, normalizeWallet } from '../../../utils/utils';
+import { firestore, FieldValue } from '../../../utils/firebaseAdmin';
 
 export async function POST(request: NextRequest) {
   try {

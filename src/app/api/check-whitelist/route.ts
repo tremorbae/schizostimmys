@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { firestore } from '@/lib/firebaseAdmin';
-import { normalizeWallet } from '@/lib/utils';
+import { firestore } from '../../../utils/firebaseAdmin';
+import { normalizeWallet } from '../../../utils/utils';
 
 export async function POST(request: NextRequest) {
   try {

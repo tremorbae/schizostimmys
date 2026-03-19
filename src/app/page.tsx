@@ -2,36 +2,19 @@
 
 import { useState, memo, useCallback, useMemo, useEffect, useRef } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-import JsonLd from "./components/JsonLd";
-import Input from "./components/Input";
-import MusicPlayer from "./components/MusicPlayer";
-
-const TitleBar = memo(({ title, onClose }: { title: string; onClose?: () => void }) => {
-  return (
-    <div className="titlebar">
-      <span>{title}</span>
-      {onClose && (
-        <div className="titlebar-buttons">
-          <div
-            className="titlebar-btn"
-            role="button"
-            tabIndex={0}
-            onClick={onClose}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                onClose();
-              }
-            }}
-          >
-            ×
-          </div>
-        </div>
-      )}
-    </div>
-  );
-});
-
+import JsonLd from "../components/seo/JsonLd";
+import Input from "../components/forms/Input";
+import MusicPlayer from "../components/features/MusicPlayer";
+import Modal from "../components/ui/Modal";
+import TitleBar from "../components/ui/TitleBar";
+import Window from "../components/layout/Window";
+import Form from "../components/forms/Form";
+import Button from "../components/ui/Button";
+import ErrorMessage from "../components/ui/ErrorMessage";
+import ProjectDetail from "../components/features/ProjectDetail";
+import SectionHeader from "../components/features/SectionHeader";
+import FormSection from "../components/forms/FormSection";
+import { TITLES, BUTTON_TEXT, FORM_DESCRIPTIONS, PLACEHOLDERS } from "../constants/constants";
 
 export default function Home() {
   const [twitter, setTwitter] = useState("");
@@ -204,7 +187,7 @@ export default function Home() {
     }
   }, []);
 
-  const isSubmitDisabled = isSubmitting || !recaptchaToken || !isRecaptchaConfigured;
+  const isSubmitDisabled = isSubmitting;
 
   // Memoized modal close handlers
   const handleCloseModal = useCallback(() => {
@@ -321,7 +304,7 @@ export default function Home() {
 
         {/* Banner Window */}
         <div className="window banner-window">
-          <TitleBar title="schizostimmys" />
+          <TitleBar title={TITLES.SCHIZOSTIMMYS} />
           <div className="body p-2">
             <div className="inset">
               <div className="banner-container">
@@ -340,7 +323,7 @@ export default function Home() {
 
           {/* LEFT — Details Window (tall) */}
           <div className="window flex-1 min-w-0 md:max-w-[420px] flex flex-col order-2 md:order-1">
-            <TitleBar title="henlo" />
+            <TitleBar title={TITLES.HENLO} />
             <div className="body flex flex-col gap-3 flex-1">
 
               {/* Combined content area */}
@@ -359,117 +342,71 @@ export default function Home() {
                     </p>
                   </div>
                   
-                  <div>
-                    <p className="section-header mb-0.5">
-                      <span
-                        className="green-arrow"
-                      >
-                        &gt;
-                      </span> about
-                    </p>
-                    <p className="about-text">
-                      sorry no text, waaaah (for now) ur just extremely early!
-                    </p>
-                  </div>
-
+                  <SectionHeader>about:</SectionHeader>
+                  <p className="about-text">
+                    sorry no text, waaaah (for now) ur just extremely early!
+                  </p>
                   <div className="project-details">
-                    <div>
-                      <span className="detail-label">
-                        <span className="green-arrow">&gt;</span> supply:
-                      </span>
-                      <br />
-                      <span className="detail-value">
-                        tba
-                      </span>
-                    </div>
-                    <div>
-                      <span className="detail-label">
-                        <span className="green-arrow">&gt;</span> wen:
-                      </span>
-                      <br />
-                      <span className="detail-value">
-                        6/--/26
-                      </span>
-                    </div>
-                    <div>
-                      <span className="detail-label">
-                        <span className="green-arrow">&gt;</span> chain:
-                      </span>
-                      <br />
-                      <span className="detail-value">
-                        $eth
-                      </span>
-                    </div>
-                    <div>
-                      <span className="detail-label">
-                        <span className="green-arrow">&gt;</span> launchpad:
-                      </span>
-                      <br />
+                    <ProjectDetail label="supply" value="tba" />
+                    <ProjectDetail label="wen" value="tba" />
+                    <ProjectDetail label="chain" value="$eth" />
+                    <ProjectDetail label="launchpad" value={
                       <a
-                        href="https://www.scatter.art/"
+                        href="https://scatter.art/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="launchpad-link"
+                        className="link-highlight"
                       >
                         scatter.art
                       </a>
-                    </div>
+                    } />
                   </div>
 
                   
                   {/* Mint Phases */}
-                  <div>
-                    <p className="section-header mb-2">
-                      <span
-                        className="green-arrow"
-                      >
-                        &gt;
-                      </span> mint phases
-                    </p>
-                    <div className="space-y-1 phases-container">
-                      <div className="flex items-start gap-2 phase-item-container">
-                        <span className="phase-bullet">•</span>
-                        <div>
-                          <span className="phase-name">phase 1: treasury</span>
-                          <br />
-                          <span className="phase-description">
-                            treasury (250-300 mints)
-                          </span>
-                        </div>
+                  <SectionHeader className="section-header mb-2">mint phases</SectionHeader>
+                  <div className="space-y-1 phases-container">
+                    <div className="flex items-start gap-2 phase-item-container">
+                      <span className="phase-bullet">•</span>
+                      <div>
+                        <span className="phase-name">phase 1: treasury</span>
+                        <br />
+                        <span className="phase-description">
+                          treasury (250-300 mints)
+                        </span>
                       </div>
-                      <div className="flex items-start gap-2 phase-item-container">
-                        <span className="phase-bullet">•</span>
-                        <div>
-                          <span className="phase-name">phase 2: frens</span>
-                          <br />
-                          <span className="phase-description">
-                            friends & contributors
-                          </span>
-                        </div>
+                    </div>
+                    <div className="flex items-start gap-2 phase-item-container">
+                      <span className="phase-bullet">•</span>
+                      <div>
+                        <span className="phase-name">phase 2: frens</span>
+                        <br />
+                        <span className="phase-description">
+                          friends & contributors
+                        </span>
                       </div>
-                      <div className="flex items-start gap-2 phase-item-container">
-                        <span className="phase-bullet">•</span>
-                        <div>
-                          <span className="phase-name">phase 3: whitelist</span>
-                          <br />
-                          <span className="phase-description">
-                            limited - sign up below!
-                          </span>
-                        </div>
+                    </div>
+                    <div className="flex items-start gap-2 phase-item-container">
+                      <span className="phase-bullet">•</span>
+                      <div>
+                        <span className="phase-name">phase 3: whitelist</span>
+                        <br />
+                        <span className="phase-description">
+                          limited - sign up below!
+                        </span>
                       </div>
-                      <div className="flex items-start gap-2 phase-item-container">
-                        <span className="phase-bullet">•</span>
-                        <div>
-                          <span className="phase-name">phase 4: public</span>
-                          <br />
-                          <span className="phase-description">
-                            open for everyone
-                          </span>
-                        </div>
+                    </div>
+                    <div className="flex items-start gap-2 phase-item-container">
+                      <span className="phase-bullet">•</span>
+                      <div>
+                        <span className="phase-name">phase 4: public</span>
+                        <br />
+                        <span className="phase-description">
+                          open for everyone
+                        </span>
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -477,8 +414,8 @@ export default function Home() {
 
           {/* RIGHT — NFT Image Window */}
           <div className="window video-window min-w-0 flex flex-col order-1 md:order-2">
-            <TitleBar title="preview - [stimmys.gif]" />
-            <div className="body flex-1 flex flex-col">
+            <TitleBar title={TITLES.PREVIEW} />
+            <div className="body flex-1 flex">
               <div className="inset flex-1 flex items-center justify-center min-h-[300px] md:min-h-[400px] p-0">
                 <video
                   className="w-full h-full object-contain"
@@ -501,22 +438,11 @@ export default function Home() {
         <div className="flex flex-col md:flex-row gap-4 items-stretch">
           {/* WL Form - order-1 mobile, order-1 desktop */}
           <div className="window wl-window basis-full md:basis-1/2 flex flex-col self-start order-2">
-            <TitleBar title="phase 3 - whitelist form [live]" />
+            <TitleBar title={TITLES.PHASE_3_FORM} />
             <div className="body flex-1 flex">
               <div className="inset p-4 flex-1 flex flex-col">
-                <form onSubmit={handleSubmit} className="space-y-3">
-                  <div className="flex items-start gap-2 mb-2">
-                    <span
-                      className="green-arrow"
-                    >
-                      &gt;
-                    </span>
-                    <p className="form-description">
-                      enter your details below to claim your phase 3 whitelist spot.
-                      limited.
-                    </p>
-                  </div>
-
+                <Form onSubmit={handleSubmit}>
+                  <FormSection description={FORM_DESCRIPTIONS.WHITELIST_FORM}>
                   <div className="flex flex-col gap-3">
                     <Input
                       label="twitter username"
@@ -533,7 +459,7 @@ export default function Home() {
                       value={wallet}
                       onChange={handleWalletChange}
                       onFocus={() => setError("")}
-                      placeholder="0x..."
+                      placeholder={PLACEHOLDERS.WALLET}
                     />
                     
                     <div className="flex flex-col gap-3">
@@ -543,7 +469,7 @@ export default function Home() {
                         value={code}
                         onChange={handleCodeChange}
                         onFocus={() => setError("")}
-                        placeholder="enter code"
+                        placeholder={PLACEHOLDERS.CODE}
                       />
                       <ReCAPTCHA
                         ref={recaptchaRef}
@@ -552,28 +478,22 @@ export default function Home() {
                         onChange={handleRecaptchaChange}
                       />
                       <div>
-                        <button type="submit" className="button w-full" disabled={isSubmitting}>
-                          {isSubmitting ? 'submitting...' : 'submit'}
-                        </button>
-                        <div className="error-container">
-                          {error && (
-                            <div className="error-text">
-                              {error}
-                            </div>
-                          )}
-                        </div>
+                        <Button type="submit" isLoading={isSubmitting} loadingText={BUTTON_TEXT.SUBMITTING} disabled={isSubmitDisabled}>
+                          {BUTTON_TEXT.SUBMIT}
+                        </Button>
+                        <ErrorMessage message={error} />
                       </div>
                     </div>
                   </div>
-
-                </form>
+                  </FormSection>
+                </Form>
               </div>
             </div>
           </div>
 
           {/* Music Player - order-3 mobile (after checker), order-2 desktop (right of form) */}
           <div className="window music-player-window basis-full md:basis-1/2 flex flex-col order-1 md:order-2 self-start">
-            <TitleBar title="schizoplayer - [its_psycotherapy] playlist" />
+            <TitleBar title={TITLES.MUSIC_PLAYER} />
             <div className="body flex-1 flex">
               <div className="inset p-0 flex-1 flex flex-col">
                 <MusicPlayer />
@@ -583,21 +503,10 @@ export default function Home() {
 
           {/* WL Checker - order-2 mobile (after form), hidden on desktop (shown in next container) */}
           <div className="window wl-window basis-full md:hidden flex flex-col self-start order-3">
-            <TitleBar title="whitelist checker" />
+            <TitleBar title={TITLES.WHITELIST_CHECKER} />
             <div className="body flex-1 flex">
               <div className="inset p-4 flex-1 flex flex-col">
-                <div className="space-y-3">
-                  <div className="flex items-start gap-2 mb-2">
-                    <span
-                      className="green-arrow"
-                    >
-                      &gt;
-                    </span>
-                    <p className="form-description">
-                      check if you're on the whitelist.
-                    </p>
-                  </div>
-
+                <FormSection description={FORM_DESCRIPTIONS.WHITELIST_CHECKER}>
                   <div className="flex flex-col gap-3">
                     <Input
                       label="wallet address"
@@ -610,29 +519,22 @@ export default function Home() {
                           handleCheckWhitelist();
                         }
                       }}
-                      placeholder="0x..."
+                      placeholder={PLACEHOLDERS.WALLET}
                     />
                   </div>
 
                   <div>
-                    <button 
+                    <Button 
                       type="button" 
-                      className="button w-full"
                       onClick={handleCheckWhitelist}
-                      disabled={isChecking}
+                      isLoading={isChecking}
+                      loadingText={BUTTON_TEXT.SUBMITTING}
                     >
-                      {isChecking ? 'submitting...' : 'submit'}
-                    </button>
-                    <div className="error-container">
-                      {checkerError && (
-                        <div className="error-text">
-                          {checkerError}
-                        </div>
-                      )}
-                    </div>
+                      {BUTTON_TEXT.SUBMIT}
+                    </Button>
+                    <ErrorMessage message={checkerError} />
                   </div>
-
-                </div>
+                </FormSection>
               </div>
             </div>
           </div>
@@ -642,21 +544,10 @@ export default function Home() {
         <div className="hidden md:flex flex-col md:flex-row gap-4 items-stretch">
           {/* WL Checker - desktop only */}
           <div className="window wl-window basis-full md:basis-1/2 flex flex-col self-start">
-            <TitleBar title="whitelist checker" />
+            <TitleBar title={TITLES.WHITELIST_CHECKER} />
             <div className="body flex-1 flex">
               <div className="inset p-4 flex-1 flex flex-col">
-                <div className="space-y-3">
-                  <div className="flex items-start gap-2 mb-2">
-                    <span
-                      className="green-arrow"
-                    >
-                      &gt;
-                    </span>
-                    <p className="form-description">
-                      check if you're on the whitelist.
-                    </p>
-                  </div>
-
+                <FormSection description={FORM_DESCRIPTIONS.WHITELIST_CHECKER}>
                   <div className="flex flex-col gap-3">
                     <Input
                       label="wallet address"
@@ -669,29 +560,22 @@ export default function Home() {
                           handleCheckWhitelist();
                         }
                       }}
-                      placeholder="0x..."
+                      placeholder={PLACEHOLDERS.WALLET}
                     />
                   </div>
 
                   <div>
-                    <button 
+                    <Button 
                       type="button" 
-                      className="button w-full"
                       onClick={handleCheckWhitelist}
-                      disabled={isChecking}
+                      isLoading={isChecking}
+                      loadingText={BUTTON_TEXT.SUBMITTING}
                     >
-                      {isChecking ? 'submitting...' : 'submit'}
-                    </button>
-                    <div className="error-container">
-                      {checkerError && (
-                        <div className="error-text">
-                          {checkerError}
-                        </div>
-                      )}
-                    </div>
+                      {BUTTON_TEXT.SUBMIT}
+                    </Button>
+                    <ErrorMessage message={checkerError} />
                   </div>
-
-                </div>
+                </FormSection>
               </div>
             </div>
           </div>
@@ -766,55 +650,31 @@ export default function Home() {
     </div>
 
       {/* Success Modal */}
-      {showModal && (
-        <div className="modal-overlay" onClick={handleCloseModal}>
-          <div
-            className="window"
-            style={{ minWidth: '280px', maxWidth: '400px', width: '90vw', margin: '0 auto', position: 'relative' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <TitleBar
-              title={code ? "phase 2 - whitelist form [live]" : "phase 3 - whitelist form [live]"}
-              onClose={handleCloseModal}
-            />
-            <div className="body p-4">
-              {successModalContent}
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        title={code ? TITLES.PHASE_2_FORM : TITLES.PHASE_3_FORM}
+      >
+        {successModalContent}
+      </Modal>
 
       {/* Whitelist Checker Modal */}
-      {showCheckerModal && (
-        <div className="modal-overlay" onClick={handleCloseCheckerModal}>
-          <div
-            className="window"
-            style={{ minWidth: '280px', maxWidth: '400px', width: '90vw', margin: '0 auto', position: 'relative' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <TitleBar title="whitelist checker" onClose={handleCloseCheckerModal} />
-            <div className="body p-4">
-              {checkerModalContent}
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={showCheckerModal}
+        onClose={handleCloseCheckerModal}
+        title={TITLES.WHITELIST_CHECKER}
+      >
+        {checkerModalContent}
+      </Modal>
 
       {/* Link Popup Modal */}
-      {showLinkModal && (
-        <div className="modal-overlay" onClick={handleCloseLinkModal}>
-          <div
-            className="window"
-            style={{ minWidth: '280px', maxWidth: '400px', width: '90vw', margin: '0 auto', position: 'relative' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <TitleBar title="something happened.." onClose={handleCloseLinkModal} />
-            <div className="body p-4">
-              {linkModalContent}
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={showLinkModal}
+        onClose={handleCloseLinkModal}
+        title={TITLES.SOMETHING_HAPPENED}
+      >
+        {linkModalContent}
+      </Modal>
     </>
   );
 }

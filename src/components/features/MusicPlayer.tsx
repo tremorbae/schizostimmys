@@ -15,8 +15,6 @@ function formatTime(seconds: number): string {
   return `${mins}:${secs.toString().padStart(2, "0")}`;
 }
 
-const AUTOPLAY_TITLE = "Future Candy";
-
 const MusicPlayer = memo(() => {
   const [tracks, setTracks] = useState<Track[]>([]);
   const [currentTrackIndex, setCurrentTrackIndex] = useState<number>(-1);
@@ -27,7 +25,6 @@ const MusicPlayer = memo(() => {
   const [bassBoost, setBassBoost] = useState(0);
   const [shuffle, setShuffle] = useState(false);
   const [repeat, setRepeat] = useState<"off" | "all" | "one">("off");
-  const [waitingForInteraction, setWaitingForInteraction] = useState(true);
   const [dragProgress, setDragProgress] = useState<number | null>(null);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -48,52 +45,13 @@ const MusicPlayer = memo(() => {
       .then((res) => res.json())
       .then((data) => {
         let t = data.tracks || [];
-        // Sort tracks: Future Candy first, then alphabetically
-        t = [...t].sort((a, b) => {
-          if (a.title.includes("Future Candy")) return -1;
-          if (b.title.includes("Future Candy")) return 1;
-          return a.title.localeCompare(b.title);
-        });
+        // Sort tracks alphabetically
+        t = [...t].sort((a, b) => a.title.localeCompare(b.title));
         setTracks(t);
         tracksRef.current = t;
-        if (t.length > 0) {
-          setWaitingForInteraction(true);
-        }
       })
       .catch(() => {});
   }, []);
-
-  // Global click/keydown listener to trigger autoplay after user interaction
-  useEffect(() => {
-    if (!waitingForInteraction) return;
-
-    const startAutoplay = (eventType?: string) => {
-      setWaitingForInteraction(false);
-      const t = tracksRef.current;
-      if (!audioRef.current || t.length === 0) return;
-
-      if (audioCtxRef.current?.state === "suspended") audioCtxRef.current.resume();
-      const autoplayTrack = t.find(track => track.title === AUTOPLAY_TITLE) || t[0];
-      audioRef.current.src = autoplayTrack.src;
-      audioRef.current.play().catch(() => {});
-      const index = t.indexOf(autoplayTrack);
-      setCurrentTrackIndex(index);
-      setIsPlaying(true);
-      setCurrentTime(0);
-      setDuration(0);
-    };
-
-    const handleClick = () => startAutoplay('click');
-    const handleKeydown = () => startAutoplay('keydown');
-
-    document.addEventListener("click", handleClick, { once: true });
-    document.addEventListener("keydown", handleKeydown, { once: true });
-
-    return () => {
-      document.removeEventListener("click", handleClick);
-      document.removeEventListener("keydown", handleKeydown);
-    };
-  }, [waitingForInteraction]);
 
   useEffect(() => {
     const audio = new Audio();
@@ -248,11 +206,6 @@ const MusicPlayer = memo(() => {
   }, []);
 
   const playTrack = useCallback((index: number) => {
-    // Disable autoplay if user manually selects a song
-    if (waitingForInteraction) {
-      setWaitingForInteraction(false);
-    }
-    
     const track = tracks[index];
     if (!track) return;
 
@@ -272,7 +225,7 @@ const MusicPlayer = memo(() => {
       setCurrentTime(0);
       setDuration(0);
     }
-  }, [currentTrackIndex, isPlaying, tracks, waitingForInteraction]);
+  }, [currentTrackIndex, isPlaying, tracks]);
 
   const togglePlay = useCallback(() => {
     const audio = audioRef.current;
@@ -331,18 +284,13 @@ const MusicPlayer = memo(() => {
   }, [tracks, currentTrackIndex, shuffle, repeat, playTrack]);
 
   const handleStop = useCallback(() => {
-    // Disable autoplay if user clicks stop first
-    if (waitingForInteraction) {
-      setWaitingForInteraction(false);
-    }
-    
     const audio = audioRef.current;
     if (!audio) return;
     audio.pause();
     audio.currentTime = 0;
     setIsPlaying(false);
     setCurrentTime(0);
-  }, [waitingForInteraction]);
+  }, []);
 
   const handleVolumeChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -393,12 +341,16 @@ const MusicPlayer = memo(() => {
         <div className="player-now-playing">
           <div className="player-track-name">
             <span className="player-marquee" ref={titleMarqueeRef}>
-              {currentTrackIndex >= 0 && tracks[currentTrackIndex] ? tracks[currentTrackIndex].title : (tracks.find(t => t.title.includes("Future Candy"))?.title || "Future Candy")}
+              {currentTrackIndex >= 0 && tracks[currentTrackIndex]
+                ? tracks[currentTrackIndex].title
+                : "select a track"}
             </span>
           </div>
           <div className="player-track-artist">
             <span className="player-marquee" ref={artistMarqueeRef}>
-              {currentTrackIndex >= 0 && tracks[currentTrackIndex] ? tracks[currentTrackIndex].artist : (tracks.find(t => t.title.includes("Future Candy"))?.artist || "YUC'e")}
+              {currentTrackIndex >= 0 && tracks[currentTrackIndex]
+                ? tracks[currentTrackIndex].artist
+                : "press play"}
             </span>
           </div>
         </div>

@@ -198,15 +198,9 @@ video::-webkit-media-controls-enclosure {
    ABOUT SECTION
    ======================================== */
 
-/* Green arrow styling */
-.green-arrow {
-  font-size: 14px;
-  color: #000000;
-}
-
 /* About text styling */
 .about-text {
-  padding-left: .7rem;
+  padding-left: 0;
   font-size: 16px;
 }
 
@@ -225,7 +219,16 @@ video::-webkit-media-controls-enclosure {
 .detail-value {
   font-size: 16px;
   color: #000000;
-  padding-left: 0.7rem;
+}
+
+.link-highlight {
+  color: #1d4ed8;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.link-highlight:hover {
+  color: #ff7fdf;
 }
 
 /* Video fallback styling */
@@ -251,22 +254,6 @@ video::-webkit-media-controls-enclosure {
   gap: 0.5rem;
   font-size: 16px;
   padding-left: 0;
-}
-
-/* ========================================
-   LAUNCHPAD SECTION
-   ======================================== */
-
-/* Launchpad link styling */
-.launchpad-link {
-  color: #000080;
-  padding-left: .7rem;
-  text-decoration: none;
-  font-size:16px;
-}
-
-.launchpad-link:hover {
-  color: #ff0000;
 }
 
 /* ========================================
