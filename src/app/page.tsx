@@ -309,7 +309,7 @@ export default function Home() {
             <div className="inset">
               <div className="banner-container">
                 <img 
-                  src="/schizostimmys-logo.png" 
+                  src="/schizostimmys-banner.png" 
                   alt="Schizostimmys logo - announcement banner"
                   className="banner-img"
                 />

@@ -477,20 +477,20 @@ input:-webkit-autofill {
    ======================================== */
 
 .banner-window {
-  min-height: 120px;
+  height: auto;
 }
 
 .banner-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
+  padding: 0;
 }
 
 .banner-img {
-  max-width: 100%;
+  width: 100%;
   height: auto;
-  max-height: 90px;
+  display: block;
 }
 
 /* ========================================
